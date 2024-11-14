@@ -30,7 +30,7 @@ async function getAccessToken(host: string, apiKey: string, password: string, do
     }
 
     const data = Object.keys(body)
-        .map((key) => `${key}=${encodeURIComponent(body[key])}`)
+        .map((key) => `${key}=${encodeURIComponent(body[key as keyof typeof body])}`)
         .join('&');
 
     const headers = {

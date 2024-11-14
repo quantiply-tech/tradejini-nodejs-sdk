@@ -4200,7 +4200,7 @@ export type TradeRecordProductEnum = typeof TradeRecordProductEnum[keyof typeof 
  * @interface TradeRecordSym
  */
 export interface TradeRecordSym {
-    [key: string]: object;
+    [key: string]: string | boolean | undefined;
 
     /**
      * 
