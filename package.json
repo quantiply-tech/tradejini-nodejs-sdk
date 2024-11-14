@@ -1,5 +1,5 @@
 {
-  "name": "@quantiply/tradejini-typescript-sdk",
+  "name": "@quantiply/tradejini-nodejs-sdk",
   "version": "1.0.0",
   "description": "Js client library for Tradejini ClubPlus API",
   "main": "dist/index.js",
