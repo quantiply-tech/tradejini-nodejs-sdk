@@ -1,0 +1,33 @@
+typings
+node_modules
+
+# misc
+.DS_Store
+.env
+.vscode
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+/**/*.log
+.idea/
+
+# From React .gitignore
+# dependencies
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# Distribution directories
+/dist
+
+# .analyzer
+.analyzer
+
+package-lock.json

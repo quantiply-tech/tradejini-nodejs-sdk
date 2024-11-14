@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://api.tradejini.com/api-doc/nxtrad-sdk/nxtrad-stream.js"></script>
+    <script>
+
+        function connCb(t, msg) {
+            if (msg.s === "connected") {
+                var events = ["orders", "positions", "trades"]
+                var tokens = ["-1_NSE"] // Exchange Token and Exchange with underscore is used here as token
+                t.subscribeL1(tokens)
+                t.subscribeGreeks(tokens)
+                t.subscribeL1Snapshot(tokens)
+                t.subscribeL2(tokens)
+                t.subscribeL2Snapshot(tokens)
+                t.subscribeOptionChain("IDX_-1_NSE", "2023-05-04") // instrument type, Exchange Token and Exchange are used here as an ID here with expiry in second param
+                t.subscribeOptionChain("IDX_-20_NSE", "2023-05-04")
+                t.subscribeEvents(events)
+                t.subscribeOHLC(tokens, "1M") // 1M,5M,30M
+            }
+            if (msg.s === "closed" && msg.reason !== "Unauthorized Access") {
+                setTimeout(() => {
+                    t.reconnect();
+                }, 5000);
+            }
+        }
+
+        function streamCb(t, msg) {
+            console.log(JSON.stringify(msg))
+        }
+
+        async function getAccessToken(host, apiKey, password, dobOrPan) {
+            const url = `https://${host}/v2/api-gw/oauth/individual-token`;
+            const body = {
+                "password": password,
+                "dobOrPan": dobOrPan
+            }
+
+            const data = Object.keys(body)
+                .map((key) => `${key}=${encodeURIComponent(body[key])}`)
+                .join('&');
+
+            const headers = {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/x-www-form-urlencoded",
+                Accept: "application/json"
+            }
+
+            return new Promise((res, rej) => {
+                fetch(url, {
+                    body: data,
+                    headers: headers,
+                    method: "POST"
+                }).then((response) => {
+                    res(response.json())
+                }).catch((err) => {
+                    rej(err)
+                })
+            })
+        }
+
+        async function init() {
+            const host = "api.tradejini.com"
+            const apiKey = "xxxxxxxxxxxxxxxx"
+            const password = "xxxxxx"
+            const dob = "xxxx"
+            const accessToken = await getAccessToken(host, apiKey, password, dob);
+            const authToken = `${apiKey}:${accessToken["access_token"]}`;
+
+            const stream = new NxtradStream(host, connCb, streamCb); //By default Symbol Store will be loaded.
+            // // const stream = new NxtradStream(host, connCb, streamCb, false); pass as false if not required
+            stream.connect(authToken).then((res) => {
+                console.log("loaded")
+            })
+        }
+        init()
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
