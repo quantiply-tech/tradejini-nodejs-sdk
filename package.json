@@ -1,6 +1,6 @@
 {
   "name": "@quantiply/tradejini-nodejs-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Js client library for Tradejini ClubPlus API",
   "main": "dist/api/index.js",
   "repository": {
